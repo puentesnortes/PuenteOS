@@ -1,0 +1,62 @@
+# PuenteOS Plymouth theme: RJ45 bridge animation on black background
+
+Plymouth.SetBackgroundTopColor (0.0, 0.0, 0.0);
+Plymouth.SetBackgroundBottomColor (0.0, 0.0, 0.0);
+
+screen_width = Window.GetWidth();
+screen_height = Window.GetHeight();
+
+# Static endpoints
+rj45_img = Image("rj45.png");
+roseta_img = Image("roseta.png");
+segment_img = Image("cable_segment.png");
+
+rj45 = Sprite(rj45_img);
+roseta = Sprite(roseta_img);
+
+start_x = screen_width * 0.20;
+start_y = screen_height * 0.62;
+end_x = screen_width * 0.74;
+end_y = screen_height * 0.56;
+
+rj45.SetPosition(start_x - rj45_img.GetWidth() / 2, start_y - rj45_img.GetHeight() / 2);
+roseta.SetPosition(end_x - roseta_img.GetWidth() / 2, end_y - roseta_img.GetHeight() / 2);
+
+# Cable segments (animated)
+segment_count = 10;
+segments = [];
+
+i = 0;
+while (i < segment_count) {
+  seg = Sprite(segment_img);
+  segments[i] = seg;
+  i = i + 1;
+}
+
+fun Lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+fun Curve(t) {
+  return Math.Sin(t * 3.14159);
+}
+
+fun Refresh() {
+  time = Plymouth.GetTime();
+  # 0..1 oscillating progress
+  p = (Math.Sin(time * 2.0) + 1.0) / 2.0;
+
+  i = 0;
+  while (i < segment_count) {
+    local_t = (i + p) / segment_count;
+    if (local_t > 1.0) { local_t = local_t - 1.0; }
+
+    x = Lerp(start_x, end_x, local_t);
+    y = Lerp(start_y, end_y, local_t) - Curve(local_t) * (screen_height * 0.04);
+
+    segments[i].SetPosition(x - segment_img.GetWidth() / 2, y - segment_img.GetHeight() / 2);
+    i = i + 1;
+  }
+}
+
+Plymouth.SetRefreshFunction(Refresh);

@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=PuenteOS Cable
+Description=RJ45 bridge cable animation on black background
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/puenteos-cable
+ScriptFile=/usr/share/plymouth/themes/puenteos-cable/puenteos-cable.script

@@ -1,0 +1,14 @@
+# Base desktop
+xfce4
+xfce4-goodies
+lightdm
+
+# Wine stack
+wine
+wine32:i386
+wine64
+winetricks
+
+# Plymouth theme support
+plymouth
+plymouth-themes

@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+# Enable multiarch for Wine 32-bit support
+if ! dpkg --print-foreign-architectures | grep -q '^i386$'; then
+  dpkg --add-architecture i386
+fi
+
+apt-get update
+apt-get install -y \
+  wine \
+  wine32 \
+  wine64 \
+  winetricks

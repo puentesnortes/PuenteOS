@@ -1,0 +1,45 @@
+name: Build PuenteOS ISO
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            live-build \
+            squashfs-tools \
+            xorriso \
+            syslinux \
+            grub-efi-amd64-bin \
+            grub-pc-bin
+
+      - name: Build ISO
+        run: |
+          lb clean --purge || true
+          ./auto/config
+          lb build
+
+      - name: Rename ISO
+        run: |
+          if [ -f live-image-amd64.hybrid.iso ]; then
+            mv -f live-image-amd64.hybrid.iso puenteos.iso
+          fi
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: puenteos-iso
+          path: puenteos.iso
