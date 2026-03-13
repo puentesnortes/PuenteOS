@@ -7,9 +7,6 @@ if printf '%s' "$HELP" | grep -q -- '--bootloaders'; then
   BOOT_ARGS="--bootloaders syslinux,grub-efi"
 elif printf '%s' "$HELP" | grep -q -- '--bootloader'; then
   BOOT_ARGS="--bootloader syslinux"
-  if printf '%s' "$HELP" | grep -q -- '--uefi'; then
-    BOOT_ARGS="$BOOT_ARGS --uefi true"
-  fi
 fi
 
 lb config \
